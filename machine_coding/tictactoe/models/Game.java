@@ -56,12 +56,12 @@ public class Game {
 
     public void makeMove(){
         Player player = this.players.get(currentPlayerIdx);
-        Pair<Integer, Integer> rowCol = player.makeMove();
+        Pair<Integer, Integer> rowCol = player.makeMove(board);
         while(!this.board.checkIfCellIsUnoccupied(rowCol.getKey(), rowCol.getValue())){
             if(player instanceof HumanPlayer){
                 System.out.println("Please make a move on a different cell");
             }
-            rowCol = player.makeMove();
+            rowCol = player.makeMove(this.board);
         }
         this.board.setPlayer(rowCol.getKey(), rowCol.getValue(), player);
         Cell cell = this.board.getCell(rowCol.getKey(), rowCol.getValue());
