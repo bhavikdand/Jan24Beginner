@@ -91,12 +91,13 @@ public class TicTacToe {
 
         GameStatus gameStatus = gameController.getGameStatus(game);
         if(gameStatus.equals(GameStatus.ENDED)){
-            // This means someone has won
+            Player winningPlayer = gameController.getCurrentPlayer(game);
+            System.out.println(winningPlayer.getName() + " has won with symbol " + winningPlayer.getSymbol().getSymbol());
         }
         else {
             System.out.println("This game has drawn");
-            gameController.printBoard(game);
         }
+        gameController.printBoard(game);
 
 
     }

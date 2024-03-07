@@ -27,4 +27,8 @@ public class GameController {
         game.makeMove();
     }
 
+    public Player getCurrentPlayer(Game game){
+        return game.getCurrentPlayer();
+    }
+
 }

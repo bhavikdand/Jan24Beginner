@@ -2,6 +2,8 @@ package machine_coding.tictactoe.models;
 
 import javafx.util.Pair;
 import machine_coding.tictactoe.exceptions.BotCountExceededException;
+import machine_coding.tictactoe.strategies.check_for_win.OrderOneWinningStrategy;
+import machine_coding.tictactoe.strategies.check_for_win.PlayerWonStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +15,15 @@ public class Game {
     private GameStatus gameStatus;
     private int currentPlayerIdx;
     private List<Move> moves;
+    private PlayerWonStrategy winningStrategy;
 
-    private Game(Board board, List<Player> players, GameStatus gameStatus, int currentPlayerIdx, List<Move> moves) {
+    private Game(Board board, List<Player> players, GameStatus gameStatus, int currentPlayerIdx, List<Move> moves, PlayerWonStrategy winningStrategy) {
         this.board = board;
         this.players = players;
         this.gameStatus = gameStatus;
         this.currentPlayerIdx = currentPlayerIdx;
         this.moves = moves;
+        this.winningStrategy = winningStrategy;
     }
 
     public static GameBuilder getBuilder(){
@@ -64,7 +68,7 @@ public class Game {
         Move move = new Move(player, cell);
         this.moves.add(move);
 
-        if(checkForWin()){
+        if(winningStrategy.checkForWin(this.board, cell)){
             this.gameStatus = GameStatus.ENDED;
             return;
         } else if(checkForDraw()){
@@ -84,12 +88,17 @@ public class Game {
         return n * n == this.moves.size();
     }
 
+    public Player getCurrentPlayer(){
+        return this.players.get(currentPlayerIdx);
+    }
+
     public static class GameBuilder{
         private Board board;
         private List<Player> players;
         private GameStatus gameStatus;
         private int currentPlayerIdx;
         private List<Move> moves;
+        private PlayerWonStrategy winningStrategy;
 
         public GameBuilder setPlayer(List<Player> players){
             this.players = players;
@@ -108,7 +117,7 @@ public class Game {
                     throw new BotCountExceededException("Found more than 1 bots, maximum only 1 bot is allowed");
                 }
             }
-            return new Game(this.board, this.players, GameStatus.IN_PROGRESS, 0, new ArrayList<>());
+            return new Game(this.board, this.players, GameStatus.IN_PROGRESS, 0, new ArrayList<>(), new OrderOneWinningStrategy(board.getSize()));
         }
 
 
