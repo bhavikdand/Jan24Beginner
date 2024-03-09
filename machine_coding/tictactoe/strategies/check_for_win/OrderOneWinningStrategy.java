@@ -2,6 +2,8 @@ package machine_coding.tictactoe.strategies.check_for_win;
 
 import machine_coding.tictactoe.models.Board;
 import machine_coding.tictactoe.models.Cell;
+import machine_coding.tictactoe.models.Move;
+import machine_coding.tictactoe.models.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +16,7 @@ public class OrderOneWinningStrategy implements PlayerWonStrategy{
 
     private HashMap<Character, Integer> diagonalMap;
     private HashMap<Character, Integer> reverseDiagonalMap;
+    private int n;
 
     public OrderOneWinningStrategy(int n) {
         rowsMap = new ArrayList<>();
@@ -24,6 +27,7 @@ public class OrderOneWinningStrategy implements PlayerWonStrategy{
             rowsMap.add(new HashMap<>());
             colsMap.add(new HashMap<>());
         }
+        this.n = n;
     }
 
     @Override
@@ -61,7 +65,7 @@ public class OrderOneWinningStrategy implements PlayerWonStrategy{
             return true;
         }
 
-        if(checkIfCellIsOnReverseDiagonal(row, col, board.getSize()) && reverseDiagonalMap.get(symbol) == board.getSize()){
+        if(checkIfCellIsOnReverseDiagonal(row, col, n) && reverseDiagonalMap.get(symbol) == board.getSize()){
             return true;
         }
 
@@ -74,5 +78,30 @@ public class OrderOneWinningStrategy implements PlayerWonStrategy{
 
     private boolean checkIfCellIsOnReverseDiagonal(int row, int col, int n){
         return row + col == n - 1;
+    }
+
+    @Override
+    public void handleUndo(Move move) {
+        Cell cell = move.getCell();
+        int row = cell.getRow();
+        int col = cell.getCol();
+
+        Player player = move.getPlayer();
+        char symbol = player.getSymbol().getSymbol();
+
+        HashMap<Character, Integer> rowMap = rowsMap.get(row);
+        rowMap.put(symbol, rowMap.get(symbol) - 1);
+
+        HashMap<Character, Integer> colMap = colsMap.get(col);
+        colMap.put(symbol, colMap.get(symbol) - 1);
+
+        if(checkIfCellIsOnDiagonal(row, col)){
+            diagonalMap.put(symbol, diagonalMap.get(symbol) - 1);
+        }
+
+        if(checkIfCellIsOnReverseDiagonal(row, col, n)){
+            reverseDiagonalMap.put(symbol, reverseDiagonalMap.get(symbol) - 1);
+        }
+
     }
 }

@@ -54,4 +54,12 @@ public class Board {
     public int getSize(){
         return this.cells.size();
     }
+
+    public void resetBoard(){
+        for (List<Cell> row : cells) {
+            for (Cell cell : row) {
+                cell.removePlayer();
+            }
+        }
+    }
 }

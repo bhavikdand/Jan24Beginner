@@ -62,13 +62,17 @@ public class TicTacToe {
                 idx = random.nextInt(s.length());
                 symbol = s.charAt(idx);
             }
+
             symbolSet.add(symbol);
             players.add(new BotPlayer("Bot " + (i+1), new Symbol(symbol), botLevel));
         }
 
+        System.out.println("Enter # of undos a player can do");
+        int numOfUndos = scanner.nextInt();
+
         Game game;
         try {
-            game = gameController.createGame(players);
+            game = gameController.createGame(players, numOfUndos);
         } catch (Exception e){
             System.out.println("Error while creating the game: " + e.getMessage());
             return;
@@ -87,6 +91,7 @@ public class TicTacToe {
             gameController.printBoard(game);
 
             gameController.makeMove(game);
+            gameController.undo(game);
         }
 
         GameStatus gameStatus = gameController.getGameStatus(game);
@@ -98,6 +103,12 @@ public class TicTacToe {
             System.out.println("This game has drawn");
         }
         gameController.printBoard(game);
+
+        System.out.println("Do you want to replay the entire game? (y/n)");
+        String replayReply = scanner.next();
+        if(replayReply.charAt(0) == 'y' || replayReply.charAt(0) == 'Y'){
+            gameController.replay(game);
+        }
 
 
     }

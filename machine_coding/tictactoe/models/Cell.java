@@ -47,6 +47,11 @@ public class Cell {
         this.cellStatus = CellStatus.OCCUPIED;
     }
 
+    public void removePlayer(){
+        this.player = null;
+        this.cellStatus = CellStatus.UNOCCUPIED;
+    }
+
     public boolean isUnoccupied(){
         return this.player == null && cellStatus.equals(CellStatus.UNOCCUPIED);
     }
