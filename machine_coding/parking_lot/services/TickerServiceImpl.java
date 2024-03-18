@@ -51,4 +51,9 @@ public class TickerServiceImpl implements TicketService{
         ticket.setEntryTime(new Date());
         return ticketRepository.insertTicket(ticket);
     }
+
+    @Override
+    public Ticket getTicketById(int ticketId) {
+        return ticketRepository.getTicketById(ticketId);
+    }
 }

@@ -24,4 +24,8 @@ public class TicketRepository {
         map.put(id++, ticket);
         return ticket;
     }
+
+    public Ticket getTicketById(int ticketId){
+        return map.get(ticketId);
+    }
 }
